@@ -3,9 +3,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const routes = require("./routes");
+//const routes = require("./routes");
 dotenv.config();
-const app = express();
 app.enable('trust proxy');
 app.use(bodyParser.json());
 app.use(
@@ -13,8 +12,7 @@ app.use(
     extended: false
   })
 );
-mongoose
-  .connect(process.env.DATABASE_URL, {
+mongoose.connect(`mongodb+srv://admin:${process.env.DATABASEURL}@cluster0-oxzqu.mongodb.net/teachme?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -25,7 +23,7 @@ mongoose
     console.log('Unable to connect');
     console.log(err);
   });
-app.use(routes);
+//app.use(routes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 module.exports = app;
