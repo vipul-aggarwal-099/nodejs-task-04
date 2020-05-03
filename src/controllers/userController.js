@@ -1,17 +1,30 @@
 const userService = require('../services/userService');
-const createUser = async (req, res, next) => {
-  const user = req.body;
+const signin = async (req, res, next) => {
   try {
-    const data = await userService.createUser(user);
-    return res.status(200).json({
+    const { email, password } = req.body;
+    const user = await userService.findUser({ email: email });
+    if (!user) {
+      return res.json({
+        status: 401,
+        message: 'User does not exist',
+      });
+    }
+    if (password != user.password) {
+      return res.json({
+        status: 401,
+        message: 'Incorrect password',
+      });
+    }
+    return res.json({
       status: 200,
-      message: 'User has been created successfully',
-      data,
+      message: 'User signed in successfully',
+      user,
     });
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 };
 module.exports = {
-  createUser
+  createUser,
+  signin,
 };
