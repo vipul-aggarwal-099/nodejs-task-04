@@ -62,7 +62,28 @@ const signin = async (req, res, next) => {
     return next(error);
   }
 };
+
+const findTutors = async (req, res, next) => {
+  try {
+    const data = await userService.findUsers({ role: 'tutor' });
+    if (!data) {
+      return res.json({
+        status: 401,
+        message: 'No tutor exists',
+      });
+    }
+    return res.json({
+      status: 200,
+      message: 'All tutors',
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   createUser,
   signin,
+  findTutors,
 };
